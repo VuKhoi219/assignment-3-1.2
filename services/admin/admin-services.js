@@ -5,7 +5,7 @@ module.exports = {
         return await Article.find({status : {$in : [0,1]} });
     },
     getArticleByField: async (field, value) => {
-        return await Article.find({ [field]: value },{status :{$in : [0,1]}});
+        return await Article.find({ [field]: value, status: { $in: [0, 1] } });
     },
     updateArticle : async (id, data) => {
         return await Article.findOneAndUpdate({_id : id}, data);
