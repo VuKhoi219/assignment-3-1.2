@@ -31,11 +31,13 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">DataTable Article</h3>
-                <div>
-                  <form action=""></form>
-                  <label for="search"> Search</label>
-                  <input type="text" name="search" id="search" placeholder="tìm kiếm ( Tiêu đề , tác giả , ngày thêm  )" value="<%= key %>">
-                </div>
+                <form class="d-flex" action="/admin/list/sreach" method="post">
+                  <input class="form-control me-2" id="search" name="search" type="search"
+                         placeholder="tìm kiếm ( Tiêu đề , tác giả , ngày thêm  )" 
+                         aria-label="Search" value="<%= searchValue ? searchValue : '' %>">
+                  <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+                
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -55,6 +57,12 @@
                     </tr>
                   </thead>
                   <tbody>
+                    <% if(!articles) {%>
+                      <tr>
+                        <td colspan="9" class="text-center">No data</td>
+                      </tr>
+                    <% } else { %>
+
                       <% for (var i = 0; i < articles.length; i++) { %>
                         <tr>
                           <td class="text-ellipsis  w-15"><%= articles[i].id %></td>
@@ -69,9 +77,9 @@
                           <td class="text-ellipsis  w-15"><%= articles[i].update_at %></td>
                           <td class="w-15 ">
                             <div class="dropdown" >
-                              <a class="btn btn-secondary dropdown-toggle"
+                              <button class="btn btn-secondary dropdown-toggle"
                                style="  background-color:<%= articles[i].status == 1 ? '#7fff00' : '#f7658c' %>"
-                                href="#" role="button"
+                                role="button"
                                  id="dropdownMenuLink"
                                   data-toggle="dropdown"
                                    aria-haspopup="true"
@@ -81,33 +89,27 @@
                                 <%}else{%>
                                     Chưa duyệt
                                 <%}%>
-                                </a>
+                              </button>
                               <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <a class="dropdown-item" href="#">Duyệt</a>
-                                <a class="dropdown-item" href="#">Khoá</a>
-                                <a class="dropdown-item" href="#">Xoá</a>
+                                <button  type="button" class="dropdown-item" >Duyệt</button>
+                                <button  type="button" class="dropdown-item" >Khoá</button>
+                                <button  type="button" class="dropdown-item"  onclick="deleteArticle('<%=articles[i]._id %>','<%=articles[i].title%>')">Xoá</button>
                               </div>
                             </div>
                           </td>
                         </tr>
-                     <%}%>           
+                     <%}%>
+                    <%}%>           
                   </tbody>
                   <tfoot>
-
                   </tfoot>
                 </table>
               </div>
-              <!-- /.card-body -->
             </div>
-            <!-- /.card -->
           </div>
-          <!-- /.col -->
         </div>
-        <!-- /.row -->
       </div>
-      <!-- /.container-fluid -->
     </section>
-    <!-- /.content -->
   </div>
 
 <%- include('../layouts/partials/script')%>
@@ -121,4 +123,24 @@
     })
   });
 
+  function deleteArticle(id,title) {
+    console.log(id,title)
+    if (confirm("Bạn muốn xóa bài viết này"+title+"?")) {
+      fetch('/admin/delete/'+id,{
+        method : "DELETE"
+      })
+      .then(res => {
+        if(res.ok){
+          window.location.reload(); // Đã sửa windown thành window
+        } else {
+          alert("Xoa bai viet that bai");
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    } else {
+      return false;
+    }
+  }
 </script>
