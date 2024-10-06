@@ -1,0 +1,124 @@
+<style>
+  .text-ellipsis {
+    max-width: 150px; /* Giới hạn chiều rộng của ô */
+    white-space: nowrap; /* Ngăn nội dung xuống dòng */
+    overflow: hidden; /* Ẩn nội dung tràn */
+    text-overflow: ellipsis; /* Hiển thị dấu "..." */
+  }
+</style>
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Article List</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Article List</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <!-- /.card -->
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">DataTable Article</h3>
+                <div>
+                  <form action=""></form>
+                  <label for="search"> Search</label>
+                  <input type="text" name="search" id="search" placeholder="tìm kiếm ( Tiêu đề , tác giả , ngày thêm  )" value="<%= key %>">
+                </div>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Tiêu Đề</th>
+                      <th>Slug</th>
+                      <th>Link gốc bài viết</th>
+                      <th>Danh mục bài viết</th>
+                      <th>Ảnh đại diện</th>
+                      <th>Tác giả </th>
+                      <th>Ngày tạo</th>
+                      <th>Ngày thay đổi</th>
+                      <th>Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                      <% for (var i = 0; i < articles.length; i++) { %>
+                        <tr>
+                          <td class="text-ellipsis  w-15"><%= articles[i].id %></td>
+                          <td class="text-ellipsis w-15"><%= articles[i].title %></td>
+                          <td class="text-ellipsis  w-15"><%= articles[i].slug %></td>
+                          <td class="text-ellipsis w-15"><a href="<%= articles[i].link %>"><%= articles[i].link %></a></td>
+                          <td class="text-ellipsis  w-15"><%= articles[i].category %></td>
+                        
+                          <td class="text-ellipsis  w-15"><img src="https://example.com/images/vuejs.jpg" alt="Vue.js"></td>
+                          <td class="text-ellipsis  w-15"><%= articles[i].author %></td>
+                          <td class="text-ellipsis  w-15"><%= articles[i].create_at %></td>
+                          <td class="text-ellipsis  w-15"><%= articles[i].update_at %></td>
+                          <td class="w-15 ">
+                            <div class="dropdown" >
+                              <a class="btn btn-secondary dropdown-toggle"
+                               style="  background-color:<%= articles[i].status == 1 ? '#7fff00' : '#f7658c' %>"
+                                href="#" role="button"
+                                 id="dropdownMenuLink"
+                                  data-toggle="dropdown"
+                                   aria-haspopup="true"
+                                    aria-expanded="false">
+                                <% if (articles[i].status == 1) {%>
+                                    Đã duyệt
+                                <%}else{%>
+                                    Chưa duyệt
+                                <%}%>
+                                </a>
+                              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <a class="dropdown-item" href="#">Duyệt</a>
+                                <a class="dropdown-item" href="#">Khoá</a>
+                                <a class="dropdown-item" href="#">Xoá</a>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                     <%}%>           
+                  </tbody>
+                  <tfoot>
+
+                  </tfoot>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+
+<%- include('../layouts/partials/script')%>
+<script>
+  $(function () {
+    $("#example1")
+    .DataTable({
+      lengthChange: true, // Để người dùng có thể thay đổi số lượng hàng hiển thị trên mỗi trang
+      paging: true, // Bật phân trang
+      searching: false, // Tắt nút tìm kiếm
+    })
+  });
+
+</script>
