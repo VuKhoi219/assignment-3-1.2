@@ -61,8 +61,8 @@ function onError(error) {
   }
 
   var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+      ? 'Pipe ' + port
+      : 'Port ' + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
@@ -85,21 +85,21 @@ function onError(error) {
 
 function onListening() {
   var addr = server.address();
-      // kết nối data
-      const db = mongoDB;
+  // kết nối data
+  const db = mongoDB;
 
 
-      mongoose.Promise= global.Promise;
-      mongoose.connect(db)
+  mongoose.Promise= global.Promise;
+  mongoose.connect(db)
       .then((res)=>{
         console.log("database connectd");
       })
       .catch((err)=>{
         console.log(err);
       })
-      // kết thúc
+  // kết thúc
   var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
+      ? 'pipe ' + addr
+      : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }

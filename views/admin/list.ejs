@@ -11,12 +11,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Article List</h1>
+            <h1>User List</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Article List</li>
+              <li class="breadcrumb-item active">User List</li>
             </ol>
           </div>
         </div>
@@ -30,12 +30,8 @@
             <!-- /.card -->
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">DataTable Article</h3>
-                <div>
-                  <form action=""></form>
-                  <label for="search"> Search</label>
-                  <input type="text" name="search" id="search" placeholder="tìm kiếm ( Tiêu đề , tác giả , ngày thêm  )" value="<%= key %>">
-                </div>
+                <h3 class="card-title">DataTable with default features</h3>
+
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -47,7 +43,9 @@
                       <th>Slug</th>
                       <th>Link gốc bài viết</th>
                       <th>Danh mục bài viết</th>
+                      <th>Mô tả bài viết</th>
                       <th>Ảnh đại diện</th>
+                      <th>Thông tin chi tiết </th>
                       <th>Tác giả </th>
                       <th>Ngày tạo</th>
                       <th>Ngày thay đổi</th>
@@ -55,42 +53,158 @@
                     </tr>
                   </thead>
                   <tbody>
-                      <% for (var i = 0; i < articles.length; i++) { %>
-                        <tr>
-                          <td class="text-ellipsis  w-15"><%= articles[i].id %></td>
-                          <td class="text-ellipsis w-15"><%= articles[i].title %></td>
-                          <td class="text-ellipsis  w-15"><%= articles[i].slug %></td>
-                          <td class="text-ellipsis w-15"><a href="<%= articles[i].link %>"><%= articles[i].link %></a></td>
-                          <td class="text-ellipsis  w-15"><%= articles[i].category %></td>
-                        
-                          <td class="text-ellipsis  w-15"><img src="https://example.com/images/vuejs.jpg" alt="Vue.js"></td>
-                          <td class="text-ellipsis  w-15"><%= articles[i].author %></td>
-                          <td class="text-ellipsis  w-15"><%= articles[i].create_at %></td>
-                          <td class="text-ellipsis  w-15"><%= articles[i].update_at %></td>
-                          <td class="w-15 ">
-                            <div class="dropdown" >
-                              <a class="btn btn-secondary dropdown-toggle"
-                               style="  background-color:<%= articles[i].status == 1 ? '#7fff00' : '#f7658c' %>"
-                                href="#" role="button"
-                                 id="dropdownMenuLink"
-                                  data-toggle="dropdown"
-                                   aria-haspopup="true"
-                                    aria-expanded="false">
-                                <% if (articles[i].status == 1) {%>
-                                    Đã duyệt
-                                <%}else{%>
-                                    Chưa duyệt
-                                <%}%>
-                                </a>
-                              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <a class="dropdown-item" href="#">Duyệt</a>
-                                <a class="dropdown-item" href="#">Khoá</a>
-                                <a class="dropdown-item" href="#">Xoá</a>
-                              </div>
-                            </div>
-                          </td>
-                        </tr>
-                     <%}%>           
+
+                      <tr>
+                        <td class="text-ellipsis  w-15">1</td>
+                        <td class="text-ellipsis w-15">Giới thiệu về Vue.js</td>
+                        <td class="text-ellipsis  w-15">gioi-thieu-ve-vuejs</td>
+                        <td class="text-ellipsis w-15"><a href="https://example.com/vuejs">https://example.com/vuejsccccccccccccccccccccccccccccccccc</a></td>
+                        <td class="text-ellipsis  w-15">Công nghệ</td>
+                        <td class="text-ellipsis  w-15">Hướng dẫn cơ bản về Vue.js cho người mới bắt đầu.</td>
+                        <td class="text-ellipsis  w-15"><img src="https://example.com/images/vuejs.jpg" alt="Vue.js"></td>
+                        <td class="text-ellipsis  w-15">Chi tiết về cách bắt đầu với Vue.js.</td>
+                        <td class="text-ellipsis  w-15">Nguyễn Văn A</td>
+                        <td class="text-ellipsis  w-15">2023-01-01</td>
+                        <td class="text-ellipsis  w-15">2023-01-02</td>
+                        <td class="text-ellipsis w-15 ">
+                          <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                              Dropdown
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                              <li><a class="dropdown-item" href="#">Action</a></li>
+                              <li><a class="dropdown-item" href="#">Another action</a></li>
+                              <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            </ul>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td>Lập trình Node.js cơ bản</td>
+                        <td>lap-trinh-nodejs-co-ban</td>
+                        <td><a href="https://example.com/nodejs">https://example.com/nodejs</a></td>
+                        <td>Lập trình</td>
+                        <td>Học cách tạo server bằng Node.js.</td>
+                        <td><img src="https://example.com/images/nodejs.jpg" alt="Node.js"></td>
+                        <td>Hướng dẫn tạo server cơ bản với Node.js.</td>
+                        <td>Trần Văn B</td>
+                        <td>2023-02-05</td>
+                        <td>2023-02-06</td>
+                        <td>Đã xuất bản</td>
+                      </tr>
+                      <tr>
+                        <td>3</td>
+                        <td>Phân tích hiệu suất Laravel</td>
+                        <td>phan-tich-hieu-suat-laravel</td>
+                        <td><a href="https://example.com/laravel">https://example.com/laravel</a></td>
+                        <td>Phát triển Web</td>
+                        <td>Các kỹ thuật tối ưu hóa hiệu suất trong Laravel.</td>
+                        <td><img src="https://example.com/images/laravel.jpg" alt="Laravel"></td>
+                        <td>Mẹo và thủ thuật cải thiện tốc độ Laravel.</td>
+                        <td>Lê Thị C</td>
+                        <td>2023-03-10</td>
+                        <td>2023-03-12</td>
+                        <td>Đã xuất bản</td>
+                      </tr>
+                      <tr>
+                        <td>4</td>
+                        <td>Quản lý trạng thái trong React</td>
+                        <td>quan-ly-trang-thai-react</td>
+                        <td><a href="https://example.com/react">https://example.com/react</a></td>
+                        <td>Frontend</td>
+                        <td>Hướng dẫn quản lý state với React Hooks.</td>
+                        <td><img src="https://example.com/images/react.jpg" alt="React"></td>
+                        <td>Cách quản lý trạng thái hiệu quả trong React.</td>
+                        <td>Phạm Thị D</td>
+                        <td>2023-04-15</td>
+                        <td>2023-04-16</td>
+                        <td>Đã xuất bản</td>
+                      </tr>
+                      <tr>
+                        <td>5</td>
+                        <td>Kỹ thuật SEO cho WordPress</td>
+                        <td>ky-thuat-seo-cho-wordpress</td>
+                        <td><a href="https://example.com/wordpress">https://example.com/wordpress</a></td>
+                        <td>SEO</td>
+                        <td>Thủ thuật SEO hiệu quả cho trang web WordPress.</td>
+                        <td><img src="https://example.com/images/wordpress.jpg" alt="WordPress"></td>
+                        <td>Các phương pháp nâng cao thứ hạng SEO.</td>
+                        <td>Nguyễn Văn E</td>
+                        <td>2023-05-20</td>
+                        <td>2023-05-22</td>
+                        <td>Đã xuất bản</td>
+                      </tr>
+                      <tr>
+                        <td>6</td>
+                        <td>Triển khai Docker cho ứng dụng Node.js</td>
+                        <td>trien-khai-docker-nodejs</td>
+                        <td><a href="https://example.com/docker-nodejs">https://example.com/docker-nodejs</a></td>
+                        <td>DevOps</td>
+                        <td>Hướng dẫn triển khai Node.js bằng Docker.</td>
+                        <td><img src="https://example.com/images/docker.jpg" alt="Docker"></td>
+                        <td>Cách sử dụng Docker để quản lý môi trường phát triển.</td>
+                        <td>Trần Văn F</td>
+                        <td>2023-06-25</td>
+                        <td>2023-06-26</td>
+                        <td>Đã xuất bản</td>
+                      </tr>
+                      <tr>
+                        <td>7</td>
+                        <td>Viết API với Express.js</td>
+                        <td>viet-api-expressjs</td>
+                        <td><a href="https://example.com/expressjs">https://example.com/expressjs</a></td>
+                        <td>Backend</td>
+                        <td>Hướng dẫn viết API RESTful với Express.js.</td>
+                        <td><img src="https://example.com/images/expressjs.jpg" alt="Express.js"></td>
+                        <td>Chi tiết từng bước viết API bằng Express.js.</td>
+                        <td>Lê Thị G</td>
+                        <td>2023-07-30</td>
+                        <td>2023-07-31</td>
+                        <td>Đã xuất bản</td>
+                      </tr>
+                      <tr>
+                        <td>8</td>
+                        <td>Học Python trong 7 ngày</td>
+                        <td>hoc-python-trong-7-ngay</td>
+                        <td><a href="https://example.com/python">https://example.com/python</a></td>
+                        <td>Lập trình</td>
+                        <td>Khóa học Python cơ bản trong 7 ngày.</td>
+                        <td><img src="https://example.com/images/python.jpg" alt="Python"></td>
+                        <td>Bài học mỗi ngày để nắm vững Python cơ bản.</td>
+                        <td>Nguyễn Văn H</td>
+                        <td>2023-08-05</td>
+                        <td>2023-08-06</td>
+                        <td>Đã xuất bản</td>
+                      </tr>
+                      <tr>
+                        <td>9</td>
+                        <td>Kỹ thuật bảo mật ứng dụng web</td>
+                        <td>ky-thuat-bao-mat-web</td>
+                        <td><a href="https://example.com/security">https://example.com/security</a></td>
+                        <td>Bảo mật</td>
+                        <td>Các biện pháp bảo mật cơ bản cho ứng dụng web.</td>
+                        <td><img src="https://example.com/images/security.jpg" alt="Security"></td>
+                        <td>Phương pháp ngăn chặn tấn công phổ biến trên web.</td>
+                        <td>Phạm Thị I</td>
+                        <td>2023-09-10</td>
+                        <td>2023-09-12</td>
+                        <td>Đã xuất bản</td>
+                      </tr>
+                      <tr>
+                        <td>10</td>
+                        <td>Tạo ứng dụng di động với React Native</td>
+                        <td>tao-ung-dung-react-native</td>
+                        <td><a href="https://example.com/react-native">https://example.com/react-native</a></td>
+                        <td>Mobile</td>
+                        <td>Hướng dẫn phát triển ứng dụng di động với React Native.</td>
+                        <td><img src="https://example.com/images/react-native.jpg" alt="React Native"></td>
+                        <td>Các bước triển khai ứng dụng di động với React Native.</td>
+                        <td>Trần Văn J</td>
+                        <td>2023-10-01</td>
+                        <td>2023-10-02</td>
+                        <td>Đã xuất bản</td>
+                      </tr>
                   </tbody>
                   <tfoot>
 
@@ -111,14 +225,48 @@
   </div>
 
 <%- include('../layouts/partials/script')%>
+<script src="../../public/plugins/jquery/jquery.min.js"></script>
+
+
+
+<script src="../../public/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../../public/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../../public/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+
+
+
+<script src="../../public/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../../public/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="../../public/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="../../public/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="../../public/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="../../public/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+
+<script src="../../public/plugins/jszip/jszip.min.js"></script>
+<script src="../../public/plugins/pdfmake/pdfmake.min.js"></script>
+<script src="../../public/plugins/pdfmake/vfs_fonts.js"></script>
+<script src="../../public/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="../../public/plugins/datatables-buttons/js/buttons.print.js"></script>
+<script src="../../public/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+s
+<!-- AdminLTE App -->
+<script src="../../public/dist/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../../public/dist/js/demo.js"></script>
 <script>
   $(function () {
     $("#example1")
     .DataTable({
+      responsive: true,
       lengthChange: true, // Để người dùng có thể thay đổi số lượng hàng hiển thị trên mỗi trang
+      searching: true, // Để bật tính năng tìm kiếm
+      autoWidth: false,
       paging: true, // Bật phân trang
-      searching: false, // Tắt nút tìm kiếm
+      buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
     })
+    .buttons()
+    .container()
+    .appendTo("#example1_wrapper .col-md-6:eq(0)");
   });
 
 </script>

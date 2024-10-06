@@ -1,8 +1,14 @@
 const mongoose = require("mongoose");
-const AutoIncrement = require("mongoose-sequence")(mongoose)
+
+// Tạo hàm tự động tăng ID (không có tự động tăng trong MongoDB giống như SQL, bạn cần tự quản lý nó)
+const autoIncrement = require("mongoose-auto-increment"); // cài package này để quản lý tự tăng
 
 const articleSchema = new mongoose.Schema({
-
+  id: {
+    type: Number,
+    required: true,
+    unique: true,
+  }, // tự tăng
   title: {
     type: String,
     required: true, // bắt buộc
@@ -34,17 +40,17 @@ const articleSchema = new mongoose.Schema({
     type: String,
     required: true, // bắt buộc
   },
-  author: {
+  Author: {
     type: String,
     required: true, // bắt buộc
   },
   create_at: {
     type: Date,
-    default: () => new Date().toLocaleDateString('vi-VN') // Định dạng ngày tháng năm Việt Nam
+    default: Date.now, // mặc định là ngày hiện tại
   },
   update_at: {
     type: Date,
-    default: () => new Date().toLocaleDateString('vi-VN') // Định dạng ngày tháng năm Việt Nam
+    default: Date.now, // mặc định là ngày hiện tại
   },
   status: {
     type: Number,
@@ -52,6 +58,15 @@ const articleSchema = new mongoose.Schema({
     default: 0, // mặc định là 0 (chưa duyệt)
   },
 });
-articleSchema.plugin(AutoIncrement, { inc_field: 'id' });
-const Article = mongoose.model("article", articleSchema,"artile");
+
+// Áp dụng tự động tăng ID
+autoIncrement.initialize(mongoose.connection);
+articleSchema.plugin(autoIncrement.plugin, {
+  model: "Article",
+  field: "id",
+  startAt: 1,
+  incrementBy: 1,
+});
+
+const Article = mongoose.model("Article", articleSchema);
 module.exports = Article;
