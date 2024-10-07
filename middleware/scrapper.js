@@ -23,11 +23,8 @@ async function fetchVNExpress() {
     const $ = cheerio.load(response.data);
     console.log(response.data);
 
-    let count = 0; // Initialize a counter to track how many articles have been saved
-
     // Lấy các bài viết từ VNExpress (chỉnh selector cho phù hợp)
     $('article.item-news').each(async (index, element) => {
-        if (count >= 2) return;  // Stop after saving 2 articles
 
         const title = $(element).find('h3.title-news a').text().trim();
         const link = $(element).find('h3.title-news a').attr('href');
@@ -51,11 +48,40 @@ async function fetchVNExpress() {
             });
             await newArticle.save();
             console.log(`Saved article: ${title}`);
-            count++;  // Increment the counter after saving an article
+        }
+    });
+}
+
+async function fetchTuoiTre() {
+    const response = await axios.get('https://tuoitre.vn/');
+    const $ = cheerio.load(response.data);
+
+    $('article').each(async (index, element) => {
+        const title = $(element).find('h3 a').text().trim();
+        const link = 'https://tuoitre.vn' + $(element).find('h3 a').attr('href');
+        const slug = toSlug(title);
+        const description = $(element).find('p.sapo').text().trim();
+        const thumbnail = $(element).find('img').attr('src');
+
+        const existingArticle = await Article.findOne({ slug });
+        if (!existingArticle) {
+            const newArticle = new Article({
+                title,
+                slug,
+                link,
+                describe: description,
+                avatar: thumbnail,
+                content: description,  // Giả sử content là phần mô tả (có thể cập nhật sau)
+                author: 'Tuổi Trẻ',
+                status: 1,
+                detailed_information: '123'
+            });
+            await newArticle.save();
+            console.log(`Saved article from Tuổi Trẻ: ${title}`);
         }
     });
 }
 
 module.exports = {
-    fetchVNExpress
+    fetchVNExpress, fetchTuoiTre
 }
