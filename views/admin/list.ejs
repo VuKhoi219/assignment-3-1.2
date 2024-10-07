@@ -1,0 +1,146 @@
+<style>
+  .text-ellipsis {
+    max-width: 150px; /* Giới hạn chiều rộng của ô */
+    white-space: nowrap; /* Ngăn nội dung xuống dòng */
+    overflow: hidden; /* Ẩn nội dung tràn */
+    text-overflow: ellipsis; /* Hiển thị dấu "..." */
+  }
+</style>
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Article List</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Article List</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <!-- /.card -->
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">DataTable Article</h3>
+                <form class="d-flex" action="/admin/list/sreach" method="post">
+                  <input class="form-control me-2" id="search" name="search" type="search"
+                         placeholder="tìm kiếm ( Tiêu đề , tác giả , ngày thêm  )" 
+                         aria-label="Search" value="<%= searchValue ? searchValue : '' %>">
+                  <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+                
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Tiêu Đề</th>
+                      <th>Slug</th>
+                      <th>Link gốc bài viết</th>
+                      <th>Danh mục bài viết</th>
+                      <th>Ảnh đại diện</th>
+                      <th>Tác giả </th>
+                      <th>Ngày tạo</th>
+                      <th>Ngày thay đổi</th>
+                      <th>Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if(!articles) {%>
+                      <tr>
+                        <td colspan="9" class="text-center">No data</td>
+                      </tr>
+                    <% } else { %>
+
+                      <% for (var i = 0; i < articles.length; i++) { %>
+                        <tr>
+                          <td class="text-ellipsis  w-15"><%= articles[i].id %></td>
+                          <td class="text-ellipsis w-15"><%= articles[i].title %></td>
+                          <td class="text-ellipsis  w-15"><%= articles[i].slug %></td>
+                          <td class="text-ellipsis w-15"><a href="<%= articles[i].link %>"><%= articles[i].link %></a></td>
+                          <td class="text-ellipsis  w-15"><%= articles[i].category %></td>
+                        
+                          <td class="text-ellipsis  w-15"><img src="https://example.com/images/vuejs.jpg" alt="Vue.js"></td>
+                          <td class="text-ellipsis  w-15"><%= articles[i].author %></td>
+                          <td class="text-ellipsis  w-15"><%= articles[i].create_at %></td>
+                          <td class="text-ellipsis  w-15"><%= articles[i].update_at %></td>
+                          <td class="w-15 ">
+                            <div class="dropdown" >
+                              <button class="btn btn-secondary dropdown-toggle"
+                               style="  background-color:<%= articles[i].status == 1 ? '#7fff00' : '#f7658c' %>"
+                                role="button"
+                                 id="dropdownMenuLink"
+                                  data-toggle="dropdown"
+                                   aria-haspopup="true"
+                                    aria-expanded="false">
+                                <% if (articles[i].status == 1) {%>
+                                    Đã duyệt
+                                <%}else{%>
+                                    Chưa duyệt
+                                <%}%>
+                              </button>
+                              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <button  type="button" class="dropdown-item" >Duyệt</button>
+                                <button  type="button" class="dropdown-item" >Khoá</button>
+                                <button  type="button" class="dropdown-item"  onclick="deleteArticle('<%=articles[i]._id %>','<%=articles[i].title%>')">Xoá</button>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                     <%}%>
+                    <%}%>           
+                  </tbody>
+                  <tfoot>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+<%- include('../layouts/partials/script')%>
+<script>
+  $(function () {
+    $("#example1")
+    .DataTable({
+      lengthChange: true, // Để người dùng có thể thay đổi số lượng hàng hiển thị trên mỗi trang
+      paging: true, // Bật phân trang
+      searching: false, // Tắt nút tìm kiếm
+    })
+  });
+
+  function deleteArticle(id,title) {
+    console.log(id,title)
+    if (confirm("Bạn muốn xóa bài viết này"+title+"?")) {
+      fetch('/admin/delete/'+id,{
+        method : "DELETE"
+      })
+      .then(res => {
+        if(res.ok){
+          window.location.reload(); // Đã sửa windown thành window
+        } else {
+          alert("Xoa bai viet that bai");
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    } else {
+      return false;
+    }
+  }
+</script>
