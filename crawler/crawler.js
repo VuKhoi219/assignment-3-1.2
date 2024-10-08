@@ -6,7 +6,7 @@ const Article = require('../models/article');
 
 const mongoose = require('mongoose');
 
-const changeToSlug = require('../models/article')
+const slugify = require('../models/article')
 mongoose.connect(process.env.MONGOOSE_URL)
     .then(() => console.log('Database connected'))
     .catch(err => console.log('Database connection error', err));
@@ -18,7 +18,7 @@ exports.fetchNhanDan = async (req, res) => {
 
             $('.story').each(async (index, el) => {
                 const title = $(el).find('h2.story__heading a').text();
-                const slug = changeToSlug(title);
+                const slug = slugify(title);
                 const link = $(el).find('h2 a').attr('href');
                 const describe = $(el).find('div.story__summary').text();
                 const Author = $(el).find('div.info-author p').text();
@@ -55,7 +55,7 @@ exports.fetchVnExpress = async (req, res) => {
 
             $('.item-news').each(async (index, el) => {
                 const title = $(el).find('h3.title-news').text();
-                const slug = changeToSlug(title);
+                const slug = slugify(title);
                 const link = $(el).find('h3 a').attr('href');
                 const describe = $(el).find('p.description').text();
                 const Author = $(el).find('article.fck_detail p.Normal[style=text-align:right;]').text();
