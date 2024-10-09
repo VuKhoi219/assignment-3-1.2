@@ -21,7 +21,6 @@ const seedArticle = async (req, res) => {
       do {
         title = faker.lorem.sentence(); // Tạo một câu
       } while (title.length < 20 || title.length > 100); // Lặp lại cho đến khi tiêu đề hợp lệ
-
       const article = new Article({
         title: title, // Tạo tiêu đề có ít nhất 2 câu
         slug: faker.lorem.slug(),
