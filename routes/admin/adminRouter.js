@@ -40,5 +40,13 @@ routers.patch("/browse-and-lock/:type/:id",async(req,res)=>{
     await adminController.browseAndLock(req,res)
 })
 
+routers.get("/vn-crawl", async (req, res) =>{
+    await adminController.vnexpressCrawler();
+})
+
+routers.get("/tuoitre-crawl", async (req, res)=>{
+    await adminController.baotuoitreCrawler();
+})
+
 
 module.exports = routers

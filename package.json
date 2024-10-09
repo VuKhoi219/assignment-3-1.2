@@ -5,7 +5,7 @@
   "scripts": {
     "start": "nodemon ./bin/www",
     "seed": "nodemon ./seeders/article-seeders.js",
-    "crawl": "node ./controllers/admin/crawl.js"
+    "crawl": "node ./services/admin/crawl.js"
   },
   "dependencies": {
     "axios": "^1.7.7",
@@ -23,6 +23,8 @@
     "mongoose-sequence": "^6.0.1",
     "morgan": "~1.9.1",
     "node-fetch": "^3.3.2",
+    "node-schedule": "^2.1.1",
+    "nodemon": "^3.1.7",
     "request-promise": "^4.2.6",
     "web-streams-polyfill": "^4.0.0"
   },

@@ -1,6 +1,7 @@
-const Article = require("../models/article");
+const Article = require("../../models/article");
 const cheerio = require('cheerio');
 const axios = require('axios');
+const schedule = require('node-schedule');
 require('dotenv').config(); // Load .env file
 
 const generateSlug = (title) => {
@@ -21,18 +22,17 @@ mongoose.connect(process.env.MONGOOSE_URL)
 async function fetchVNExpress() {
     const response = await axios.get('https://vnexpress.net/');
     const $ = cheerio.load(response.data);
-    // console.log(response.data);
 
-    // Lấy các bài viết từ VNExpress (chỉnh selector cho phù hợp)
     $('article.item-news').each(async (index, element) => {
-
         const title = $(element).find('h3.title-news a').text().trim();
+        if(title.length <20 || title.length >100){
+            return
+        }
         const link = $(element).find('h3.title-news a').attr('href');
         const slug = generateSlug(title);
         const describe = $(element).find('p.description').text().trim();
-        const avatar = $(element).find('img').attr('src');
+        const avatar = $(element).find('img').attr('data-src');
 
-        // Lưu vào database nếu bài viết chưa tồn tại
         const existingArticle = await Article.findOne({ slug });
         if (!existingArticle) {
             const newArticle = new Article({
@@ -41,7 +41,7 @@ async function fetchVNExpress() {
                 link,
                 describe,
                 avatar,
-                content: describe,  // Giả sử content là phần mô tả (có thể cập nhật sau)
+                content: describe,
                 author: 'VNExpress',
                 status: 1,
                 detailed_information: '123'
@@ -59,7 +59,7 @@ async function fetchTuoiTre() {
     $('article').each(async (index, element) => {
         const title = $(element).find('h3 a').text().trim();
         const link = 'https://tuoitre.vn' + $(element).find('h3 a').attr('href');
-        const slug = toSlug(title);
+        const slug = generateSlug(title);
         const description = $(element).find('p.sapo').text().trim();
         const thumbnail = $(element).find('img').attr('src');
 
@@ -71,7 +71,7 @@ async function fetchTuoiTre() {
                 link,
                 describe: description,
                 avatar: thumbnail,
-                content: description,  // Giả sử content là phần mô tả (có thể cập nhật sau)
+                content: description,
                 author: 'Tuổi Trẻ',
                 status: 1,
                 detailed_information: '123'
@@ -80,9 +80,30 @@ async function fetchTuoiTre() {
             console.log(`Saved article from Tuổi Trẻ: ${title}`);
         }
     });
-    return r
 }
 
-module.exports = {
-    fetchVNExpress, fetchTuoiTre
+// Hàm chạy tất cả
+async function run() {
+    console.log('Fetching articles...');
+    await fetchVNExpress();
+    console.log("///////////////////////////////////////////")
+    await fetchTuoiTre();
+    console.log('Completed fetching articles.');
 }
+
+// Gọi hàm run ngay lập tức
+run();
+
+// Lập lịch fetch
+schedule.scheduleJob('0 7,18 * * *', async () => {
+    console.log('Starting auto fetch news...');
+    await fetchVNExpress();
+    await fetchTuoiTre();
+    console.log('Completed auto fetch.');
+});
+
+module.exports = {
+    fetchVNExpress,
+    fetchTuoiTre,
+    run // Xuất hàm run nếu cần
+};
