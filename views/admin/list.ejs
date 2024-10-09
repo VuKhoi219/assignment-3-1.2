@@ -4,6 +4,20 @@
     white-space: nowrap; /* Ngăn nội dung xuống dòng */
     overflow: hidden; /* Ẩn nội dung tràn */
     text-overflow: ellipsis; /* Hiển thị dấu "..." */
+    object-fit: cover; /* Giữ cho hình ảnh lấp đầy khung nhưng không biến dạng */
+  }
+  .text-ellipsis:hover{
+    max-width: none; /* Cho phép chiều rộng không giới hạn */
+    white-space: normal; /* Cho phép nội dung xuống dòng */
+    overflow: visible; /* Hiển thị toàn bộ nội dung */  }
+  img {
+    width: 100%;
+    max-height: 150px;
+    object-fit: contain;
+  }
+  #search{
+    width: 40%;
+    padding-right: 50px;
   }
 </style>
     <!-- Content Header (Page header) -->
@@ -30,14 +44,17 @@
             <!-- /.card -->
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">DataTable Article</h3>
-                <form class="d-flex" action="/admin/list/sreach" method="post">
-                  <input class="form-control me-2" id="search" name="search" type="search"
-                         placeholder="tìm kiếm ( Tiêu đề , tác giả , ngày thêm  )" 
-                         aria-label="Search" value="<%= searchValue ? searchValue : '' %>">
-                  <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
-                
+                <div>
+                  <h3 class="card-title">DataTable Article</h3>
+                </div>
+                <div>
+                  <form class="d-flex" action="/admin/list/sreach" method="post">
+                    <input class="form-control me-2" id="search" name="search" type="search"
+                           placeholder="tìm kiếm ( Tiêu đề , tác giả , ngày thêm  )" 
+                           aria-label="Search" value="<%= searchValue ? searchValue : '' %>">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                  </form>
+                </div>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -65,13 +82,13 @@
 
                       <% for (var i = 0; i < articles.length; i++) { %>
                         <tr>
-                          <td class="text-ellipsis  w-15"><%= articles[i].id %></td>
+                          <td class="text-ellipsis  w-15 h-15"><%= articles[i].id %></td>
                           <td class="text-ellipsis w-15"><%= articles[i].title %></td>
                           <td class="text-ellipsis  w-15"><%= articles[i].slug %></td>
                           <td class="text-ellipsis w-15"><a href="<%= articles[i].link %>"><%= articles[i].link %></a></td>
                           <td class="text-ellipsis  w-15"><%= articles[i].category %></td>
                         
-                          <td class="text-ellipsis  w-15"><img src="https://example.com/images/vuejs.jpg" alt="Vue.js"></td>
+                            <td class="text-ellipsis  w-15"><img src="VUE.JS" alt="Vue.js"></td>
                           <td class="text-ellipsis  w-15"><%= articles[i].author %></td>
                           <td class="text-ellipsis  w-15"><%= articles[i].create_at %></td>
                           <td class="text-ellipsis  w-15"><%= articles[i].update_at %></td>
@@ -91,9 +108,12 @@
                                 <%}%>
                               </button>
                               <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <button  type="button" class="dropdown-item" >Duyệt</button>
-                                <button  type="button" class="dropdown-item" >Khoá</button>
-                                <button  type="button" class="dropdown-item"  onclick="deleteArticle('<%=articles[i]._id %>','<%=articles[i].title%>')">Xoá</button>
+                                <button  type="button" class="dropdown-item" onclick="browseAndLock('<%=articles[i]._id %>','browse')" >Duyệt</button>
+                                <button  type="button" class="dropdown-item" onclick="browseAndLock('<%=articles[i]._id %>','lock')" >Khoá</button>
+                                <button  type="button" class="dropdown-item"  onclick="deleteArticle('<%=articles[i]._id %>','<%= articles[i].title%>')">Xoá</button>
+                                <a type="button" class="dropdown-item"  href="/admin/edit/<%=articles[i]._id %>">
+                                  Chỉnh sửa
+                                </a>
                               </div>
                             </div>
                           </td>
@@ -101,9 +121,16 @@
                      <%}%>
                     <%}%>           
                   </tbody>
-                  <tfoot>
-                  </tfoot>
                 </table>
+              </div>
+              <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Update article</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                </div>
               </div>
             </div>
           </div>
@@ -111,7 +138,6 @@
       </div>
     </section>
   </div>
-
 <%- include('../layouts/partials/script')%>
 <script>
   $(function () {
@@ -130,8 +156,12 @@
         method : "DELETE"
       })
       .then(res => {
+        console.log(res)
         if(res.ok){
-          window.location.reload(); // Đã sửa windown thành window
+          console.log('thanh cong')
+          window.location.reload(); 
+          alert("Xoá bài viết thành công")
+
         } else {
           alert("Xoa bai viet that bai");
         }
@@ -143,4 +173,43 @@
       return false;
     }
   }
+  function browseAndLock(id,type){
+    console.log(id , type)
+    if (type =="browse") {
+      console.log("browse");
+      fetch('/admin/browse-and-lock/browse/'+id,{
+        method : "PATCH"
+      })
+      .then(res => {
+        console.log(res)
+        if(res.ok){
+          console.log('thanh cong')
+          window.location.reload(); 
+          alert(" mở khoá  bài viết thành công")
+        } else {
+          alert("Sua bai viet that bai");
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    } else if(type=="lock") {
+      console.log("lock");
+      fetch('/admin/browse-and-lock/lock/'+id,{
+        method : "PATCH"
+      })
+      .then(res =>{
+        console.log(res)
+        if(res.ok){
+          window.location.reload();
+        }
+        else{
+          alert("Sua bai viet that bai");
+        }
+      })
+    }
+     else {
+      return false;
+    }
+  }  
 </script>

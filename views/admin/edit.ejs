@@ -1,0 +1,55 @@
+<div class="container  ">
+  <h2>Create New Aricle</h2>
+  <div class="form border border-1 rounded shadow-lg p-3 bg-body rounded">
+    <form action="/admin/edit/<%= result._id %>" method="post" class="p-5" >
+      <div class="mb-3">
+        <label for="title" class="form-label">Tiêu đề </label>
+        <input type="text" class="form-control" id="title" name="title" value="<%= result.title %>" minlength="20" maxlength="100" required>
+      </div>
+      <!-- Slug -->
+      <div class="mb-3">
+        <label for="slug" class="form-label">Slug </label>
+        <input type="text" class="form-control" id="slug" name="slug" value="<%= result.slug %>" required>
+      </div>
+  
+      <!-- Link -->
+      <div class="mb-3">
+        <label for="link" class="form-label">Link </label>
+        <input type="url" class="form-control" id="link" name="link" value="<%= result.link %>" required>
+      </div>
+  
+      <!-- Category -->
+      <div class="mb-3">
+        <label for="category" class="form-label">Danh mục bài viết </label>
+        <input type="text" class="form-control" id="category" name="category" value="<%= result.category %>">
+      </div>
+  
+      <!-- Describe -->
+      <div class="mb-3">
+        <label for="describe" class="form-label">Mô tả </label>
+        <textarea class="form-control" id="describe" name="describe" required> <%= result.describe %></textarea>
+      </div>
+  
+      <!-- Avatar -->
+      <div class="mb-3">
+        <label for="avatar" class="form-label">Ảnh đại diện </label>
+        <input type="text" class="form-control" id="avatar" name="avatar" value="<%= result.avatar %>">
+      </div>
+  
+      <!-- Detailed Information -->
+      <div class="mb-3">
+        <label for="detailed_information" class="form-label">THông tin chi tiết </label>
+        <textarea class="form-control" id="detailed_information" name="detailed_information" required> <%= result.detailed_information %></textarea>
+      </div>
+  
+      <!-- Author -->
+      <div class="mb-3">
+        <label for="author" class="form-label">tác giả </label>
+        <input type="text" class="form-control" id="author" name="author" value="<%= result.author %>" required>
+      </div>
+  
+      <!-- Submit Button -->
+      <button type="submit" class="btn btn-primary">Lưu</button>
+    </form>
+  </div>
+</div>

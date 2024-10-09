@@ -1,3 +1,5 @@
+const json = require("body-parser/lib/types/json");
+const { browseAndLock } = require("../../repository/admin/admin-repository");
 const adminServices = require("../../services/admin/admin-services");
 
 module.exports = {
@@ -22,6 +24,19 @@ module.exports = {
         searchValue: searchValue,
         message: "Lỗi hệ thóng",
       });
+    }
+  },
+  getArticleById : async (req, res) => {
+    try {
+      const result = await adminServices.getArticleById(req.params.id);
+      console.log(result);
+      if (result) {
+        return res.render("admin/edit", {result});
+      }
+      return res.render("admin/edit", { result: {} });
+    }catch(e){
+      console.error("Error while creating article:", e);
+      return res.render("admin/edit");
     }
   },
   getArticleByField: async (req, res) => {
@@ -62,14 +77,13 @@ module.exports = {
     } catch (e) {
       console.log("Error while creating article:", e);
       res.send("Lỗi hệ thống");
-      //   res.render("admin/list", {
-      //     articles: [], // hoặc null
-      //     searchValue: searchValue,
-      //     message: "Lỗi hệ thóng",
-      //   });
+        res.render("admin/list", {
+          articles: [], // hoặc null
+          searchValue: searchValue,
+          message: "Lỗi hệ thóng",
+        });
     }
   },
-
   createArticleForm: async (req, res) => {
     const message = req.query.message || "";
     console.log("Message:", message); // Lấy thông điệp từ query
@@ -80,7 +94,7 @@ module.exports = {
       let data = req.body;
       // console.log("data :" + data)
       if (!data) {
-        return res.redirect(`/admin/create1?message=Dữ lệu không hợp lệ`);
+        return res.redirect(`/admin/create1`);
       }
       if (data.link) {
         data.link = data.link.trim();
@@ -92,27 +106,24 @@ module.exports = {
           data.link = "https://" + data.link;
         }
       } else {
-        return res.redirect("admin/create", { message: "Vui lòng nhập link" });
+        return res.redirect("/admin/create1", { message: "Vui lòng nhập link" });
       }
       const result = await adminServices.createArticle(data);
       if (!result) {
         return res.redirect(
-          `/admin/create1?message=Tạo bài viết không thành công`
+          `/admin/create1`
         );
       }
-      return res.redirect(`/admin/create1?message=Tạo bài viết thành công`);
+      return res.redirect(`/admin/list`);
     } catch (e) {
       console.error("Error while creating article:", e);
-      return res.redirect(`/admin/create1?message=Lỗi hệ thống `);
+      return res.redirect(`/admin/create1`);
     }
   },
-
   updateArticle: async (req, res) => {
     try {
       let data = req.body;
-      if (!data) {
-        return res.redirect("/admin/create");
-      }
+      // console.log(req.body)
       if (data.link) {
         data.link = data.link.trim();
         // Kiểm tra nếu link không bắt đầu bằng 'http://' hoặc 'https://'
@@ -123,37 +134,46 @@ module.exports = {
           data.link = "https://" + data.link;
         }
       } else {
-        return res.render("admin/create", { message: "Vui lòng nhập link" });
+        return  res.redirect("/admin/list")
       }
       const result = await adminServices.updateArticle(req.params.id, data);
       if (!result) {
-        return res.render("admin/create", {
-          message: " Cập nhật bài viết không thành công",
-        });
+        return  res.redirect("/admin/list")
       }
-      return res.render("admin/create", {
-        message: " Tạo bài viết thanh cong",
-      });
+      return  res.redirect("/admin/list")
     } catch (e) {
       console.error("Error while creating article:", e);
-      res.render("admin/list", { message: "Lỗi hệ thóng" });
+      return  res.redirect("/admin/list")
     }
   },
 
   deleteArticle: async (req, res) => {
     try {
       const result = await adminServices.deleteArticle(req.params.id);
+      console.log(result)
       if (!result) {
-        return res.redirect("/admin/list", {
-          message: "Xóa bài viết không thành công",
-        });
+        return  res.type('json').send({ message: 'Xoá thất bại' });
       }
-      return res.redirect("/admin/list", {
-        message: "Xóa bài viết thanh cong",
-      });
+      return  res.type('json').send({ message: 'Xoá thành công bại' });
+
     } catch (e) {
       console.error("Error while creating article:", e);
-      res.render("admin/list", { message: "Lỗi hệ thóng" });
+      return  res.type('json').send({ message: 'Lỗi hệ thống' });
     }
   },
-};
+  browseAndLock : async ( req,res) => {
+    try {
+      const result = await adminServices.browseAndLock(req.params.type,req.params.id);
+      console.log(result)
+      if (!result) {
+        return  res.type('json').send({ message: 'Chỉnh trạng thái thất bại' });
+      }
+      return  res.type('json').send({ message: 'Chỉnh trạng thái thành công' });
+
+    } catch (e) {
+      console.error("Error while creating article:", e);
+      return  res.type('json').send({ message: 'Lỗi hệ thống' });
+    }
+  }
+
+}
