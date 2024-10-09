@@ -1,6 +1,5 @@
-const json = require("body-parser/lib/types/json");
-const { browseAndLock } = require("../../repository/admin/admin-repository");
 const adminServices = require("../../services/admin/admin-services");
+const crawl = require("../../controllers/admin/crawl");
 
 module.exports = {
   getAllArticle: async (req, res) => {
@@ -146,7 +145,6 @@ module.exports = {
       return  res.redirect("/admin/list")
     }
   },
-
   deleteArticle: async (req, res) => {
     try {
       const result = await adminServices.deleteArticle(req.params.id);
@@ -174,6 +172,5 @@ module.exports = {
       console.error("Error while creating article:", e);
       return  res.type('json').send({ message: 'Lỗi hệ thống' });
     }
-  }
-
+  },
 }

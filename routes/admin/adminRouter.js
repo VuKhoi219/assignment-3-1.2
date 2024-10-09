@@ -40,4 +40,5 @@ routers.patch("/browse-and-lock/:type/:id",async(req,res)=>{
     await adminController.browseAndLock(req,res)
 })
 
+
 module.exports = routers
