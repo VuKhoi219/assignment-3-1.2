@@ -1,5 +1,5 @@
 const adminServices = require("../../services/admin/admin-services");
-const crawl = require("../../controllers/admin/crawl");
+const crawl = require("../../services/admin/crawl");
 
 module.exports = {
   getAllArticle: async (req, res) => {
@@ -95,6 +95,7 @@ module.exports = {
       if (!data) {
         return res.redirect(`/admin/create1`);
       }
+      data.slug = data.title.trim().replace(/ /g, "-").toLowerCase().replace(/[\u0300-\u036f]/g, '').replace(/[^\w-]+/g, '');;
       if (data.link) {
         data.link = data.link.trim();
         // Kiểm tra nếu link không bắt đầu bằng 'http://' hoặc 'https://'
@@ -173,4 +174,35 @@ module.exports = {
       return  res.type('json').send({ message: 'Lỗi hệ thống' });
     }
   },
+  // vnexpressCrawler : async (res) => {
+  //   try {
+  //     const result = await crawl.fetchVNExpress();
+  //     console.log(result)
+  //     if (!result) {
+  //       return res.type('json').send({ message: 'Lấy tin từ VnExpress thất bại'});
+  //     }
+  //     else {
+  //       return res.type('json').send({ message: 'Lấy tin từ VnExpress thành công'});
+  //     }
+  //   } catch (e) {
+  //     console.error("Error while creating article:", e);
+  //     return  res.type('json').send({ message: 'Lỗi hệ thống' });
+  //   }
+  // },
+  // baotuoitreCrawler : async (res) => {
+  //   try {
+  //     const result = await crawl.fetchVNExpress();
+  //     console.log(result)
+  //     if (!result) {
+  //       return res.send('abc');
+  //       // return res.type('json').send({message: 'Lấy tin từ VnExpress thất bại'});
+  //     } else {
+  //       return res.send('abc');
+  //       // return res.type('json').send({message: 'Lấy tin từ VnExpress thành công'});
+  //     }
+  //   } catch (e) {
+  //     console.error("Error while creating article:", e);
+  //     return res.send("abc");
+  //   }
+  // }
 }
