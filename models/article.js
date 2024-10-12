@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const AutoIncrement = require("mongoose-sequence")(mongoose)
+const Category = require("./category"); // Import model Category
 
 const articleSchema = new mongoose.Schema({
 
@@ -9,21 +10,12 @@ const articleSchema = new mongoose.Schema({
     minlength: 20, // dài tối thiểu 20 ký tự
     maxlength: 100, // dài tối đa 100 ký tự
   },
-  slug: {
-    type: String,
-    required: true, // bắt buộc
-    unique: true, // slug phải là duy nhất cho mỗi bài viết
-  },
   link: {
     type: String,
     required: true, // bắt buộc (link gốc của bài viết)
   },
   category: {
-    type: String,
-    required: false, // không bắt buộc
-  },
-  describe: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId, // Tham chiếu tới Category
     required: false, // không bắt buộc
   },
   avatar: {
